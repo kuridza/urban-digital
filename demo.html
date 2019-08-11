@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="urban-digital.js"></script>
+</head>
+<body style="width: 900px; margin: 0 auto;">
+<h2>Interactive canvas</h2>
+<div style="display: grid; grid-template-columns: repeat(9, 1fr);">
+	<div style="grid-column: span 3">
+		<button onclick="redraw()">Change color</button>
+		<form>
+			<input type="checkbox" checked onchange="circleDraw(this)">loop
+			<br><br>
+			Pixel size:<br>
+			<input type="range" min="3" value="5" max="10" onchange="setSize(this.value)"><br>
+			Animate speed: <br>
+			<input type="range" value="90" min="0" max="100" onchange="setAnimate(this.value)"><br>
+			Color number: <br>
+			<input type="range" value="1" min="0" max="4" onchange="setColors(this.value)"><br>
+			Bad pixels: <br>
+			<input type="range" value="10" min="0" max="80" onchange="setBad(this.value)"><br>
+			Shape:<br>
+			<input name="shape" type="radio" onchange="noneShape()">None <br>
+			<input name="shape" type="radio" value="SmileyShape" onchange="setShape(this.value)"> Smiley <br>
+			<input name="shape" type="radio" value="CircleShape" onchange="setShape(this.value)"> Circle <br>
+			<input name="shape" type="radio" value="PlayShape" onchange="setShape(this.value)"> Play <br>
+			<input name="shape" type="radio" value="HiveShape" onchange="setShape(this.value)"> Hive <br>
+			<input name="shape" type="radio" value="RombShape" onchange="setShape(this.value)"> Romb <br>
+			<input name="shape" type="radio" value="CrossShape" onchange="setShape(this.value)"> Cross <br>
+			<br>
+		</form>
+		<button onclick="fullscreen()">Fullscreen</button>
+	</div>
+	<div class="canvas" style="grid-column: span 6"></div>
+</div>
+<h2>Examples: </h2>
+<script>
+	var ud1 = new UrbanDigital();
+	ud1.create(300, 300);
+	ud1.setBackground('fa4412');
+	ud1.setShape(new SmileyShape());
+	ud1.draw();
+
+	var ud2 = new UrbanDigital();
+	ud2.create(300, 300);
+	ud2.setShape(new CircleShape());
+	ud2.draw();
+	
+	var ud3 = new UrbanDigital();
+	ud3.create(300, 300);
+	ud3.setColors(['fa56fa', '434321']);
+	ud3.setShape(new HiveShape());
+	ud3.draw();
+	
+	var ud4 = new UrbanDigital();
+	ud4.create(300, 300);
+	ud4.colorsNumber(2);
+	ud4.setShape(new PlayShape());
+	ud4.setColorRange(10);
+	ud4.draw();
+
+	var ud5 = new UrbanDigital();
+	ud5.create(300, 300);
+	ud5.colorsNumber(2);	
+	ud5.setShape(new RombShape());
+	ud5.setColorRange(100);
+	ud5.draw();
+
+	var ud6 = new UrbanDigital();
+	ud6.create(300, 300);
+	ud6.setBad(1);
+	ud6.draw();
+		
+	var ud7 = new UrbanDigital();
+	ud7.create(300, 300);
+	ud7.setBackground('ffffff');
+	ud7.setInner('ff0000');
+	ud7.setShape(new CrossShape());
+	ud7.animate();
+	
+	var ud8 = new UrbanDigital();
+	ud8.create(300, 300);
+	ud8.redraw(1000);
+		
+	var ud9 = new UrbanDigital();
+	ud9.create(300, 300);
+	ud9.setDotSize(5);
+	ud9.colorsNumber(2);
+	ud9.setBad(0);
+	ud9.draw();
+	
+	var udb = new UrbanDigital(document.querySelector('.canvas'));
+	udb.create(600,600);
+	udb.setDotSize(5);
+	udb.preventRandomizeBackground = true;
+	udb.preventRandomizeInner = true;
+	udb.draw();
+
+	function setSize(size) {
+		udb.setDotSize(size);
+		udb.draw();
+	}
+	function setShape(shape) {
+		shape = eval(shape);
+		udb.setShape(new shape);
+	}
+	function noneShape() {
+		udb.setShape(null);
+		udb.draw();
+	}
+	function redraw() {
+		udb.background = udb.randomColor();
+		udb.innerColor = udb.randomColor();
+		if(! udb.isAnimate) {
+			udb.draw();
+		}
+	}
+	function setAnimate(speed) {
+		if(+speed) {
+			clearInterval(udb.isAnimate);
+			udb.animate(101 - speed);		
+		} else {
+			clearInterval(udb.isAnimate);
+			udb.isAnimate = false;
+		}
+	}
+	function setBad(n) {
+		udb.setBad(n**2 / 10000);
+		udb.draw();
+	}
+	function setColors(n) {
+		udb.preventRandomizeColor = false;
+		udb.colorsNumber(+n);
+		udb.preventRandomizeColor = true;
+		udb.draw();
+	}
+	var circle = 0;
+	function circleDraw(el) {
+		if(el.checked) {
+			circle = setInterval(redraw, 5000);
+		} else {
+			clearInterval(circle);
+		}
+	}
+	function fullscreen() {
+		udb.element.requestFullscreen();
+	}
+	document.addEventListener('fullscreenchange', function () {
+		if(document.fullscreenElement) {
+			udb.resize(window.innerWidth, window.innerHeight);
+		} else {		
+			udb.resize(600, 600);
+		}
+	}, false);
+	document.querySelector('form').reset();
+	setSize(5);
+	setAnimate(90);
+	setBad(10);
+	setColors(1);
+	circleDraw(document.querySelector('[type=checkbox]'));
+</script>
+</body>
+</html>
