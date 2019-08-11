@@ -2,6 +2,6 @@
 
 ### [Demo](http://cssdeck.com/labs/full/3zmtyqru)
 
-### Screenshot ![screenshot]
+### Screenshot 
 
-(screenshot.png?raw=true "screenshot")
+![screenshot](screenshot.png?raw=true "screenshot")
