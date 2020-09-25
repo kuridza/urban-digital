@@ -1,6 +1,6 @@
 # urban-digital
 
-### [Demo](http://cssdeck.com/labs/full/3zmtyqru)
+### [Demo](https://kuridza.github.io/urban-digital/)
 
 ### Screenshot 
 
